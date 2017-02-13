@@ -70,8 +70,9 @@ I should also note, I masked out an entire triangle-negative region in my images
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+To obtain the required "birds-eye" perspective of the lane, I created a perspective transform that would allow me to shift the apparent z-coordinates in my image to produce an image with more accurately sized lanes, thus easing the intensity histogram method below (both by augmenting the relevant pixel count and regularizing the geometry of the pair of lines, making it easier to "cheat" at the initial guess for the lanes in each subsequent window (again, see that method's notes for further detail). 
 
+Unfortunately, this was again a highly hands-on, if less obscure process. In order to create the transform, we require four points (definining a quadrilateral) on an original image, as well as the four points defining the shape and size of the desired quadrilateral (this is again accomplished through the creation of a matrix with homogeonous coordinates used to map through a 3d space and into an alternative projection). I felt the simplest way to do this was to take the lane lines from a straight lane, select the appropriate points from the trapezoid it "bounded" and then provide an appropriately sized rectangle of coordinates to map it onto. This was not hard to do, but again, it was very much a manual process. As suggested, I applied my transform to a number of images to ensure that it projected into an appropriate form (e.g. lane lines being mostly parallel, most of the distortion being well away from the road). See below:
 ```
 src = np.float32(
     [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
@@ -85,7 +86,6 @@ dst = np.float32(
     [(img_size[0] * 3 / 4), 0]])
 
 ```
-This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
@@ -93,8 +93,6 @@ This resulted in the following source and destination points:
 | 203, 720      | 320, 720      |
 | 1127, 720     | 960, 720      |
 | 695, 460      | 960, 0        |
-
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
 ![alt text][image4]
 
