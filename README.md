@@ -106,6 +106,9 @@ Then I did some other stuff and fit my lane lines with a 2nd order polynomial ki
 
 {\displaystyle \rho (t)={\frac {\left|1+f'^{\,2}(t)\right|^{\frac {3}{2}}}{\left|f''(t)\right|}}.}
 
+p = np.poly1d([1,1,1,1])
+>>> p2 = np.polyder(p)
+>>> p2
 
 I did this in lines # through # in my code in `my_other_file.py`
 
