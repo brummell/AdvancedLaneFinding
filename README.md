@@ -104,6 +104,9 @@ Then I did some other stuff and fit my lane lines with a 2nd order polynomial ki
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
+{\displaystyle \rho (t)={\frac {\left|1+f'^{\,2}(t)\right|^{\frac {3}{2}}}{\left|f''(t)\right|}}.}
+
+
 I did this in lines # through # in my code in `my_other_file.py`
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
