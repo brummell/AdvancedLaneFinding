@@ -19,7 +19,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
+[chessboard_distortion_correction]:  https://github.com/brummell/AdvancedLaneFinding/blob/master/chessboarddistortioncomparioson.png?raw=true "Chessboard Distotion Correction"
 [image2]: ./test_images/test1.jpg "Road Transformed"
 [image3]: ./examples/binary_combo_example.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
@@ -42,8 +42,10 @@ See below for an example of using our results to correct one of the chessboard i
 ###Pipeline (single images)
 
 ####1. Provide an example of a distortion-corrected image.
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+
+Using the distortion correction method, with my previous calculated coefficients of distortion and camera matrix, we can easily correct the distortions for a picture captured by this camera/lens. See below:
+
+![alt text][cardistortion]
 
 
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
