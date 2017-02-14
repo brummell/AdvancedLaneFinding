@@ -19,8 +19,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[chessboard_distortion_correction]:  https://github.com/brummell/AdvancedLaneFinding/blob/master/chessboarddistortioncomparioson.png?raw=true "Chessboard Distotion Correction"
-[image2]: ./test_images/test1.jpg "Road Transformed"
+[chessboard_distortion_correction]:  https://github.com/brummell/AdvancedLaneFinding/blob/master/chessboarddistortioncomparioson.png?raw=true "Chessboard Distortion Correction"
+[car_distortion]: https://github.com/brummell/AdvancedLaneFinding/blob/master/cardistortioncomparioson.png?raw=true "Chessboard Distortion Correction"
 [image3]: ./examples/binary_combo_example.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
@@ -43,9 +43,9 @@ See below for an example of using our results to correct one of the chessboard i
 
 ####1. Provide an example of a distortion-corrected image.
 
-Using the distortion correction method, with my previous calculated coefficients of distortion and camera matrix, we can easily correct the distortions for a picture captured by this camera/lens. See below:
+Using the distortion correction method, with my previous calculated coefficients of distortion and camera matrix, we can easily correct the distortions for a picture captured by this camera/lens. The distortion correction is fairly minimal, but the sign in the middle left and shrubbery in the middle right reveal that the images radial distortion has been corrected. See below:
 
-![alt text][cardistortion]
+![alt text][car_distortion]
 
 
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
