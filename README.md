@@ -23,6 +23,8 @@ The goals / steps of this project are the following:
 [car_distortion]: ./cardistortioncomparioson.png "Chessboard Distortion Correction"
 [hsv_threshold]: ./hsv_thresholds.png "HSV Thresholding Examples"
 [sobel_insufficieny]: ./sobel_examples.png "Sobel Thresholding Examples"
+[warp_points]: ./pointsforperspectve.png "Point Selection for Perspective Warp"
+[warped_car]: ./warped.png "Example of Image Warp"
 [histogrammed_lanes]: ./histoexample.png "Histogram Method for Lane-Finding"
 [curvature_equation]: ./curvature_eq
 [pipeline_example]: ./samplepipeline.png "Pipeline Output"
@@ -79,28 +81,10 @@ I should also note, I masked out an entire triangle-negative region in my images
 To obtain the required "birds-eye" perspective of the lane, I created a perspective transform that would allow me to shift the apparent z-coordinates in my image to produce an image with more accurately sized lanes, thus easing the intensity histogram method below (both by augmenting the relevant pixel count and regularizing the geometry of the pair of lines, making it easier to "cheat" at the initial guess for the lanes in each subsequent window (again, see that method's notes for further detail). 
 
 Unfortunately, this was again a highly hands-on, if less obscure process. In order to create the transform, we require four points (definining a quadrilateral) on an original image, as well as the four points defining the shape and size of the desired quadrilateral (this is again accomplished through the creation of a matrix with homogeonous coordinates used to map through a 3d space and into an alternative projection). I felt the simplest way to do this was to take the lane lines from a straight lane, select the appropriate points from the trapezoid it "bounded" and then provide an appropriately sized rectangle of coordinates to map it onto. This was not hard to do, but again, it was very much a manual process. As suggested, I applied my transform to a number of images to ensure that it projected into an appropriate form (e.g. lane lines being mostly parallel, most of the distortion being well away from the road). See below:
-```
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
 
-```
+![alt text][warp_points]
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
-
-![alt text][image4]
+![alt text][warped_car]
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
