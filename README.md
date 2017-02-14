@@ -113,17 +113,15 @@ I had worried that the histogram may wind up with insufficient points to correct
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-{\displaystyle \rho (t)={\frac {\left|1+f'^{\,2}(t)\right|^{\frac {3}{2}}}{\left|f''(t)\right|}}.}
+Radius of curvature, corresponding geometrically to the radius of the circle defining the curve, and algebraically, to a simple equation of first and second derivatives of the curve (for a graph). See below
 
-p = np.poly1d([1,1,1,1])
->>> p2 = np.polyder(p)
->>> p2
+![alt text][curvature_equation]
 
-I did this in lines # through # in my code in `my_other_file.py`
+To find the radius I chose the y-value 1/3 of the way from the bottom of the warped image (top of the axis), this seemed a reasonably low-distortion, useful position for the curvature calculation). Entering this into the equation yielded RoCs for each lane line. Unfortunately, these were in terms of pixels. Fortunately, the code provided the means to convert pixels to x and y distances in meters (done empirically) and to then refit the polynomials and then once again find the RoCs. 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I combined all necessary functions into a single, but simple processing pipeline which could be passed an image, either from an image file or a video. An example of the results using a still is presented below.
 
 ![alt text][image6]
 
