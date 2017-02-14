@@ -19,14 +19,14 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[chessboard_distortion_correction]:  https://github.com/brummell/AdvancedLaneFinding/blob/master/chessboarddistortioncomparioson.png?raw=true "Chessboard Distortion Correction"
-[car_distortion]: https://github.com/brummell/AdvancedLaneFinding/blob/master/cardistortioncomparioson.png?raw=true "Chessboard Distortion Correction"
-[hsv_threshold]: ./hsv_thresholds "HSV Thresholding Examples"
+[chessboard_distortion_correction]:  ./chessboarddistortioncomparioson.png "Chessboard Distortion Correction"
+[car_distortion]: ./cardistortioncomparioson.png "Chessboard Distortion Correction"
+[hsv_threshold]: ./hsv_thresholds.png "HSV Thresholding Examples"
 [sobel_insufficieny]: ./sobel_examples.png "Sobel Thresholding Examples"
 [histogrammed_lanes]: ./histoexample.png "Histogram Method for Lane-Finding"
 [curvature_equation]: ./curvature_eq
-[pipeline_example]: ./samplepipeline.png "Output"
-[video1]: ./project_video.mp4 "Video"
+[pipeline_example]: ./samplepipeline.png "Pipeline Output"
+[video1]: ./white.mp4 "Video Output"
 
 ###Camera Calibration
 
