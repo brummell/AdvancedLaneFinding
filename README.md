@@ -21,10 +21,11 @@ The goals / steps of this project are the following:
 
 [chessboard_distortion_correction]:  https://github.com/brummell/AdvancedLaneFinding/blob/master/chessboarddistortioncomparioson.png?raw=true "Chessboard Distortion Correction"
 [car_distortion]: https://github.com/brummell/AdvancedLaneFinding/blob/master/cardistortioncomparioson.png?raw=true "Chessboard Distortion Correction"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
+[hsv_threshold]: ./hsv_thresholds "HSV Thresholding Examples"
+[sobel_insufficieny]: ./sobel_examples.png "Sobel Thresholding Examples"
+[histogrammed_lanes]: ./histoexample.png "Histogram Method for Lane-Finding"
+[curvature_equation]: ./curvature_eq
+[pipeline_example]: ./samplepipeline.png "Output"
 [video1]: ./project_video.mp4 "Video"
 
 ###Camera Calibration
@@ -56,19 +57,20 @@ I spent quite a bit of time working on this aspect of the project, and found it 
 
 The first thresholds I worked were all based off of the Sobel operator, which is a --traditionally- 3x3 operator, the product of a differentiation kernel and an averaging kernel. Thus, when applied against the greyscale image intensities, it yields smoothed gradients of those intensities. The first two I tried we the individual x and y component gradients. These were somewhat useful individually, but it turns out that the best use of them was to create a filter from their logical conjunction, as the y gradient alone tended to pick up gradients in places as treelines, etc., all of which were useless. Thus the conjunction allowed the component gradients to reinforce eachother as well as threshold certain gradients unlikely to be useful for finding lane lines. 
 
-The next pair of thresholds I used were based on the overall gradient, specifically the magnitude of the total gradient (found by taking the L^2 norm of the components) and the direction of the total gradient (found by taking the arctan of their y/x division). In trying to reassure myself of the correctness of the code, I spent some time convincing myself that lane lines are such that using the absolute value of the component gradients to find the direction in a reduced space (pi/2) did in fact allow one set of thresholds to capture all of the approrpriate angles, which was a fun reminded of high school geometry. That said, I didn't find much additional gain from these thresholds; parameterizing them was frustratingly empirical and they they struggled to pick out the gradient of the yellow lane against the brightly lit street. See below: 
+The next pair of thresholds I used were based on the overall gradient, specifically the magnitude of the total gradient (found by taking the L^2 norm of the components) and the direction of the total gradient (found by taking the arctan of their y/x division). In trying to reassure myself of the correctness of the code, I spent some time convincing myself that lane lines are such that using the absolute value of the component gradients to find the direction in a reduced space (pi/2) did in fact allow one set of thresholds to capture all of the approrpriate angles, which was a fun reminded of high school geometry. That said, I didn't find much additional gain from these thresholds; parameterizing them was frustratingly empirical and they they often struggled to pick out the gradient of the yellow lane against the brightly lit street (though, I found HSV sufficient, and didn't have to, moving to single channel probably could've corrected this). 
+
+In fact, even in a number of logical combinations, the Sobel masks were at best, acceptable performers, at least compared to the star of my whole pipeline, HSV thresholding.
+See below: 
 
 ![alt text][sobel_insufficieny]
 
-In fact, even in a number of logical combinations, the Sobel masks were at best, acceptable performers, at least compared to the star of my whole pipeline, HSV thresholding.
 
 HSV, a cylindrical mapping of RGB, is a common color space for use in computer vision. It paints images as three layers: hue, saturation, and value. Using this system, and a helper method I wrote for my first lane finding project, I found it much easier to define the color thresholds I was interested in. In particular, I found a lot of success using an online tool that yields HSV coordinates from the pixel on an uploaded image to determine how the distant yellow lines differed from the sunlit street in the example pictures. This was an extremely useful method, and one that I will be sure to use in any similar endeavor. With my yellow and white spectrum thresholds, I simply made another mask from their conjunction and applied it to the image (converted to HSV, of course). This method pulled the lanes out of every sample picture with very little parameter adjustment. Granted, this is still an empirical method, and limited (at least in my implementation) to lanes of white and yellow, under reasonable light (shadow was not an issue though), but I think for this use case, it is probably an acceptable sacrafice, as I can think of no other common lane colors in this country. 
 
-![alt text][hsv_threshold]
 
 I should also note, I masked out an entire triangle-negative region in my images. This cut down tremendously on noise in the later steps, and can be made sufficiently loose as to ensure lane inclusion on all highway driving with this camera, regardless of the incline of the road. 
 
-![alt text][triangle_chop]
+![alt text][hsv_threshold]
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
@@ -106,7 +108,7 @@ dst = np.float32(
 
 In order to find lanes on my manipulated image, I modified the Udacity code that takes a half-height, bottom slice of the thresholded binary image, creates a histogram of pixels, columnwise, and then extracts the maximum to set the anticipated center at the baseline. Then, for n windows, we begin to take 1/n slices of the image, and enclose rectangles of specified size around the previously generated x value. Within this rectangle, we record all of the hot, or 1-valued points, if they exceed an empirically set value, we find the centroid of these points and use it to define a new expected mean x value for the lanes in the subsequent 1/nth slice of the image. See image below
 
-![alt text][histogramed_lanes]
+![alt text][histogrammed_lanes]
 
 Following the gathering of these hot points, we simply use numpy's polyfit method to fit a polynomial (in this case, of degree, but one could imagine a system where a third degree may be necessary, assuming a sufficiently winding, highly visible road) for each set of points (left and right). 
 
@@ -114,6 +116,8 @@ I had worried that the histogram may wind up with insufficient points to correct
 
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+
+*see cell 5 of ipython notebook
 
 Radius of curvature, corresponding geometrically to the radius of the circle defining the curve, and algebraically, to a simple equation of first and second derivatives of the curve (for a graph). See below
 
@@ -125,7 +129,7 @@ To find the radius I chose the y-value 1/3 of the way from the bottom of the war
 
 I combined all necessary functions into a single, but simple processing pipeline which could be passed an image, either from an image file or a video. An example of the results using a still is presented below.
 
-![alt text][image6]
+![alt text][pipeline_example]
 
 ---
 
