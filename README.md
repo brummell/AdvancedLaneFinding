@@ -70,6 +70,8 @@ I should also note, I masked out an entire triangle-negative region in my images
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
+*see cell 5 of ipython notebook
+
 To obtain the required "birds-eye" perspective of the lane, I created a perspective transform that would allow me to shift the apparent z-coordinates in my image to produce an image with more accurately sized lanes, thus easing the intensity histogram method below (both by augmenting the relevant pixel count and regularizing the geometry of the pair of lines, making it easier to "cheat" at the initial guess for the lanes in each subsequent window (again, see that method's notes for further detail). 
 
 Unfortunately, this was again a highly hands-on, if less obscure process. In order to create the transform, we require four points (definining a quadrilateral) on an original image, as well as the four points defining the shape and size of the desired quadrilateral (this is again accomplished through the creation of a matrix with homogeonous coordinates used to map through a 3d space and into an alternative projection). I felt the simplest way to do this was to take the lane lines from a straight lane, select the appropriate points from the trapezoid it "bounded" and then provide an appropriately sized rectangle of coordinates to map it onto. This was not hard to do, but again, it was very much a manual process. As suggested, I applied my transform to a number of images to ensure that it projected into an appropriate form (e.g. lane lines being mostly parallel, most of the distortion being well away from the road). See below:
@@ -98,9 +100,16 @@ dst = np.float32(
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+*see cell 5 of ipython notebook
 
-![alt text][image5]
+In order to find lanes on my manipulated image, I modified the Udacity code that takes a half-height, bottom slice of the thresholded binary image, creates a histogram of pixels, columnwise, and then extracts the maximum to set the anticipated center at the baseline. Then, for n windows, we begin to take 1/n slices of the image, and enclose rectangles of specified size around the previously generated x value. Within this rectangle, we record all of the hot, or 1-valued points, if they exceed an empirically set value, we find the centroid of these points and use it to define a new expected mean x value for the lanes in the subsequent 1/nth slice of the image. See image below
+
+![alt text][histogramed_lanes]
+
+Following the gathering of these hot points, we simply use numpy's polyfit method to fit a polynomial (in this case, of degree, but one could imagine a system where a third degree may be necessary, assuming a sufficiently winding, highly visible road) for each set of points (left and right). 
+
+I had worried that the histogram may wind up with insufficient points to correctly track highly curved lanes, but I found that the base implementation worked out-of-the-box with my HSV thresholding on all images and and every frame of the video, and so for the sake of time, left it as is. There are a number of possible solutions to this matter, including a reset after a number of failed windows to a full width histogram, possibly deeper as well, as the rough location of the loss-of-track, that would use all available information (at the cost of efficiency) to reground the algorithm. This could also be augmented by extrapolation of the found polynomials of the previous successful slide, or even the radius of curvature (described below). 
+
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
