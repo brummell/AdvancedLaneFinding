@@ -23,7 +23,7 @@ The goals / steps of this project are the following:
 [car_distortion]: ./cardistortioncomparioson.png "Chessboard Distortion Correction"
 [hsv_threshold]: ./hsv_thresholds.png "HSV Thresholding Examples"
 [sobel_insufficieny]: ./sobel_examples.png "Sobel Thresholding Examples"
-[warp_points]: ./pointsforperspectve.png "Point Selection for Perspective Warp"
+[warp_points]: ./pointsforperspective.png "Point Selection for Perspective Warp"
 [warped_car]: ./warped.png "Example of Image Warp"
 [histogrammed_lanes]: ./histoexample.png "Histogram Method for Lane-Finding"
 [curvature_equation]: ./curvature_eq
