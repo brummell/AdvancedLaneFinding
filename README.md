@@ -103,6 +103,8 @@ Radius of curvature, corresponding geometrically to the radius of the circle def
 
 To find the radius I chose the y-value 1/3 of the way from the bottom of the warped image (top of the axis), this seemed a reasonably low-distortion, useful position for the curvature calculation). Entering this into the equation provided by Udacity yielded RoCs for each lane line. Unfortunately, these were in terms of pixels. Fortunately, the code provided the means and measurements to convert pixels to x and y distances in meters (done empirically) and to then refit the polynomials and then once again find the RoCs. I found the RoCs to be reasonable for curved roads, but highly variant over short periods of time.
 
+Deviation from center was calculated at the same position as RoC as a difference between lanes, and found to be nearly half a meter at all times, I suspect this is just an artifact of the camera positioning, but could just as well be people's tendency to keep slightly to the side while driving on the highway.
+
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
 I combined all necessary functions into a single, but simple processing pipeline which could be passed an image, either from an image file or a video. An example of the results using a still is presented below.
@@ -115,7 +117,7 @@ I combined all necessary functions into a single, but simple processing pipeline
 
 ####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./white.mp4)
 
 ---
 
@@ -123,4 +125,14 @@ Here's a [link to my video result](./project_video.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I found this project to be considerably more straightforward than the others, including the first lane-finding project. Largely, I suspect this is because I walked into it already having written my HSV yellow/white thresholding function, and only needing to tune it slightly. Granted the histogram method proved very functional, but many of my fellow students who I conversed with also modified or outright used the same solution and had considerable issues in shadows, etc.. As I mentioned, I wound up not even using the Sobel methods I wrote. 
+
+Even more surprising was the smoothness of the found lanes even without the moving average smoothing I used in my first project. I think that really speaks to a different kind inherent usefulness in using the histogram method compared to Canny/Hough, at least in some cases. 
+
+OpenCV masked over much of the mathematical troubles in converting to homogeonous coordinates, etc. for the camera calibration and perspective transforms. Although I found the math very interesting as I read more and more about it, it certainly isn't lost on me how much I benefitted from the availability of said library. 
+
+
+Concerning likely failure points, you can see many of them in the attempts at the challenge video, and even to some extent parts of the main video when using Sobel: primarily, the presence of irrelevant parallel lines such as barriers or roadwork artifacts throw the algorithm into a tizzy. I suspect this could be corrected in a not-to-algorithmically way in my chosen system, but it would require even additional empirical parameters to choose only consistent lines that are a certain distance apart. I imaging the situation only getting worse in middle-lane driving. Moreover, see my comments in the poly-fitting section for my thoughts on the possible failure states of the histogram method and some imagineable solutions to those issues. 
+
+Overwhelmingly, though, I'm reminded of one of my first attempts at the behavioral cloning project, in which my car drove off of the road into the parking lot, but despite the lack of road or markers, had apparently learned how to navigate by running parallel to large, warped rectangular paths. This was very early on in the project, and even still, my convnet showed a level of robustness I can't even imagine this method maintaining. The community, both amongst my classmates, and in the broader SDC community seems to already be heading this way for the same problem description.  
+
