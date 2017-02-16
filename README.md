@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [warped_car]: ./warped.png "Example of Image Warp"
 [histogrammed_lanes]: ./histoexample.png "Histogram Method for Lane-Finding"
 [curvature_equation]: https://wikimedia.org/api/rest_v1/media/math/render/svg/8c371c3a26f78a89d42d5a8b9b5e8a55d53600b8
-[pipeline_example]: ./samplepipeline.png "Pipeline Output"
+[pipeline_example]: ./samplepipeline1.png "Pipeline Output"
 [video1]: ./white.mp4 "Video Output"
 
 ###Camera Calibration
