@@ -97,13 +97,15 @@ I had worried that the histogram may wind up with insufficient points to correct
 
 *see cell 11 of ipython notebook
 
-Radius of curvature, corresponding geometrically to the radius of the circle defining the curve, and algebraically, to a simple equation of first and second derivatives of the curve (for a graph). See below
+Radius of curvature, corresponding geometrically to the radius of the circle defining the curve, and algebraically, to a simple equation of first and second derivatives of the curve (for a graph).See below
 
 ![alt text][curvature_equation]
 
-To find the radius I chose the y-value 1/3 of the way from the bottom of the warped image (top of the axis), this seemed a reasonably low-distortion, useful position for the curvature calculation). Entering this into the equation provided by Udacity yielded RoCs for each lane line. Unfortunately, these were in terms of pixels. Fortunately, the code provided the means and measurements to convert pixels to x and y distances in meters (done empirically) and to then refit the polynomials and then once again find the RoCs. I found the RoCs to be reasonable for curved roads, but highly variant over short periods of time.
+To find the radius I chose the y-value at the bottom of the warped image where the car would be located. Entering this into the equation provided by Udacity yielded RoCs for each lane line. Unfortunately, these were in terms of pixels. Fortunately, the code provided the means and measurements to convert pixels to x and y distances in meters (done empirically) and to then refit the polynomials and then once again find the RoCs. I found the RoCs to be reasonable for curved roads, but highly variant over short periods of time.
 
-Deviation from center was calculated at the same position as RoC as a difference between lanes, and found to be nearly half a meter at all times, I suspect this is just an artifact of the camera positioning, but could just as well be people's tendency to keep slightly to the side while driving on the highway.
+Deviation from center was calculated by comparing the center of the image to the measured middle between the two lanes (left + right x positions, divided by 2).
+
+I also added a low-pass filter for RoC calculations as well as the car deviation to deal with the high variance. 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
